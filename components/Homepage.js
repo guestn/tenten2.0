@@ -25,20 +25,13 @@ export default class Homepage extends Component {
 		this.state = {
       slider1: 220,
       switchBool: false,
-      settings: this.props.settings
+      settings: props.settings
     }
     this.tempSetting = this.tempSetting.bind(this)
     this.heaterSetting = this.heaterSetting.bind(this)
 
 	  console.log(this.props)
 
-	}
-	
-	componentWillReceiveProps(nextProps) {
-		//console.log('nextProps',nextProps)
-		this.setState({
-			settings: nextProps.settings
-		})
 	}
 	
 	tempSetting(value) {
@@ -52,7 +45,7 @@ export default class Homepage extends Component {
 		this.setState({
 			switchBool: value
 		})
-		this.props.heaterSetting(value)
+		this.props.onSwitchChange(value)
 	}
 	
   render() {
@@ -66,21 +59,20 @@ export default class Homepage extends Component {
 						meterColor='#0cd' 
 						textColor='#999'
 						value={this.state.slider1}
+						tempScale={this.props.tempScale}
 						onValueChange={(value) => this.tempSetting(value)}
 						tempSetting={(value) => this.tempSetting(value)}
           	/>
 	    	</View>
 	    	<View style={S.switchCont}>
-		    	<CustomSwitch active={(value) => {this.heaterSetting(value)}}/>
+		    	<CustomSwitch onChange={(value) => {this.heaterSetting(value)}}/>
 	    	</View>
 	    	<View style={S.statusContainer}>
 	    		<Text style={S.text}>Heating is currently { this.state.switchBool ? 'ON' : 'OFF' }</Text>
 	    	</View>
 	    	<View><Text>{
-		    	this.state.settings ? 'Far' : 'Cel'}</Text></View>
+		    	this.props.tempScale ? 'Far' : 'Cel'}</Text></View>
 	    </LinearGradient>
 	  );
 	}
 }
-
-//          	onValueChange={(value) => this.setState({slider1:value})}/>

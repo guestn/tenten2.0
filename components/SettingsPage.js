@@ -15,7 +15,8 @@ import {
 import S from '../styles';
 
 import LinearGradient from 'react-native-linear-gradient';
-import MaterialSwitch from './MaterialSwitch';
+//import MaterialSwitch from './MaterialSwitch';
+import CustomSwitch from './CustomSwitch';
 
 
 export default class SettingsPage extends Component {
@@ -24,14 +25,15 @@ export default class SettingsPage extends Component {
 		this.state = {
 			farenheitScale: null
 		}
+		this.saveData = this.saveData.bind(this)
 	}
+	
 	
 	componentDidMount() {
 		AsyncStorage.getItem('tempScale').then((value) => {
 			if (value != null) {
 				console.log('there is storage',value)
 				var val = (value === "true");
-				console.log('val',val)
 				this.setState({farenheitScale: val});
 			}
     }).done();
@@ -40,11 +42,7 @@ export default class SettingsPage extends Component {
 	
 	saveData(value) {
 		this.setState({farenheitScale: value})
-		console.log(value)
-    AsyncStorage.setItem('tempScale', JSON.stringify(value));
-    AsyncStorage.getItem('tempScale').then((value) => {
-	    console.log('storageIs',value)
-	  }).done();
+	  this.props.onChange(value);
   }
 	
   render() {
@@ -54,12 +52,8 @@ export default class SettingsPage extends Component {
 	    	<View style={S.settingsSwitchCont}>
 	    		<Text style={S.text}>Celcius</Text>
 	    		<View style={S.switchCont}>
-		    	
-		    	<Switch
-		    		value={this.state.farenheitScale}
-          	onValueChange={(value)=>{ this.saveData(value) }}
-          />
-		    	</View>
+		    	<CustomSwitch active={this.props.active} onChange={(value) => {this.saveData(value)}}/>
+	    	</View>
 		    	<Text style={S.text}>Farenheit</Text>
 	    	</View>
 	    </LinearGradient>

@@ -26,7 +26,7 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tempSetting: 0,
+			tempSetting: 180,
 			heaterSetting: false,
 			settings: true
 		}
@@ -35,8 +35,9 @@ export default class App extends Component {
 		this.handleSwitchChanges = this.handleSwitchChanges.bind(this)
 		this.getStorage = this.getStorage.bind(this)
 		this.props.tempSetting = this.handleSliderChanges;
-		this.props.heaterSetting = this.handleSwitchChanges;
+		this.props.onChange = this.handleSwitchChanges;
 
+		this.handleSettingChanges = this.handleSettingChanges.bind(this)
 	}
 	
 	componentDidMount() {
@@ -53,7 +54,6 @@ export default class App extends Component {
 			}
     }).done();
     console.log('storageGot')
-
 	}
 	
 	handleSliderChanges(value) {
@@ -61,24 +61,32 @@ export default class App extends Component {
 			tempSetting: value
 		})
 	}
+	
 	handleSwitchChanges(value) {
-		console.log('rootvalue',value)
 		this.setState({
 			heaterSetting: value
 		})
 	}
+	
+	handleSettingChanges(value) {
+		console.log(value);
+		this.setState({
+			settings: value
+		})
+		AsyncStorage.setItem('tempScale', JSON.stringify(value));
+	}
 
 	renderScene(route, navigator) {
 		if(route.index === 0) {
-		  return <Homepage navigator={navigator} tempSetting={this.handleSliderChanges} heaterSetting={this.handleSwitchChanges} settings={this.state.settings}/>
+		  return <Homepage navigator={navigator} tempSetting={this.handleSliderChanges} onSwitchChange={(value) => this.handleSwitchChanges(value)} tempScale={this.state.settings} onSettingChange={this.handleSettingChanges}/>
 		}
 		if(route.index === 1) {
-     return <SettingsPage navigator={navigator} settings={this.state.settings}/>
+     return <SettingsPage navigator={navigator} active={this.state.settings} onChange={(value) => {this.handleSettingChanges(value)}}/>
    	}
 	}
 	
   render() {
-	  console.log(this.state)
+		console.log('rootstate',this.state)
 	  
 	  const routes = [
 	    {title: 'Home', index: 0},

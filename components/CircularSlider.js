@@ -60,13 +60,14 @@ export default class CircularSlider extends Component {
     this.props.onValueChange(this.cartesianToPolar(locationX,locationY))
   }
   
+  
+  
   render() {
     const { width, height, value, meterColor, textColor, onValueChange } = this.props,
       { cx, cy, r } = this.state,
       startCoord = this.polarToCartesian(0),
       endCoord = this.polarToCartesian(value),
-      temperatureValue = Math.floor(value/18 + 60);
-      //console.log(this.props)
+      temperatureValue = (this.props.tempScale) ? Math.floor(value/18 + 60) :  Math.floor(((value/18 + 60)- 32)*5/9);
     return (
 	    <Animated.View 
 	    style={{
@@ -78,6 +79,9 @@ export default class CircularSlider extends Component {
       <Svg onLayout={this.onLayout} width={width} height={height}>
  
         <Text key={value+''} x={158} y={80} fontSize={96} fill={textColor} textAnchor="middle">{temperatureValue+''}&#176;</Text>
+        <Text x={213} y={153} fontSize={30} fill={textColor} textAnchor="middle">
+	        { this.props.tempScale ? 'F' : 'C' }
+	      </Text>
       	<Defs>
 					<LinearGradient id="grad" x1="0" y1="0" x2="170" y2="0">
 						<Stop offset="0" stopColor="#67B26F" stopOpacity="1" />

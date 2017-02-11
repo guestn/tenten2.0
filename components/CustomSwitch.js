@@ -19,43 +19,45 @@ export default class CustomSwitch extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			active: false,
+			active: props.active,
 			position: new Animated.Value(-10),
 		}
-
 		this.onPress = this.onPress.bind(this)
 	
 	}
 
   componentDidMount() {
-		
+
+
+		const position = this.state.active ? 50: -10;
+		this.setState({
+			position: new Animated.Value(position)
+		})
 	}
 	
 	onPress(value) {
-		//console.log('value',value)
 		this.setState({
 			active: !this.state.active		
 		})
-		this.props.active(!this.state.active)
-		//console.log('click',this.state.active);
-		const position = this.state.active ? -10 : 50
-			
-		this.animateToggle(position) 
+		this.props.onChange(!this.state.active)
+		const newPosition = this.state.active ? -10 : 50			
+		this.animateToggle(newPosition) 
 	}
 	
 	animateToggle(position) {
-			Animated.timing(
-	      this.state.position,
-	      {
-	        toValue: position,
-	        duration: 200,
-	      }
-	    ).start();
+		Animated.timing(
+      this.state.position,
+      {
+        toValue: position,
+        duration: 200,
+      }
+    ).start();
 	}
   
   render() {
 		//const position = this.state.active ? 50 : -10
-		const position = this.state.position; 
+		const position = this.state.position;
+		const color = this.state.active ?  '#67B26F' : '#4ca2cd'
 
     return (
 	    <TouchableHighlight 
@@ -64,7 +66,7 @@ export default class CustomSwitch extends Component {
 	    	active={this.state.active}
 	    	>
 	    	<Animated.View style={[s.switchToggle,
-		    	{left: position }
+		    	{left: position, backgroundColor: color }
 		    	]}>
 	    	</Animated.View>
 	    </TouchableHighlight>
@@ -93,5 +95,4 @@ var s = StyleSheet.create({
 		shadowOffset: {width:0, height:5},
 		shadowRadius: 5,
 	}
-	
-});3
+});

@@ -63,7 +63,6 @@ export default class MaterialSwitch extends Component {
 	start() {
 		return {};
 	};
-  //start: {}
 
   
   componentWillMount() {
