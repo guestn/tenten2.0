@@ -11,13 +11,10 @@ import {
   TouchableHighlight
 } from 'react-native';
 import S from '../styles';
-
-import CircularSlider from './CircularSlider';
-import MaterialSwitch from './MaterialSwitch';
-import CustomSwitch from './CustomSwitch';
-
 import LinearGradient from 'react-native-linear-gradient';
 
+import CircularSlider from './CircularSlider';
+import CustomSwitch from './CustomSwitch';
 
 export default class Homepage extends Component {
 	constructor(props) {
@@ -38,7 +35,7 @@ export default class Homepage extends Component {
 		this.setState({
 			slider1: value
 		})
-		this.props.tempSetting(value)
+		this.props.onSliderChange(value)
 	}
 	
 	heaterSetting(value) {
@@ -70,8 +67,6 @@ export default class Homepage extends Component {
 	    	<View style={S.statusContainer}>
 	    		<Text style={S.text}>Heating is currently { this.state.switchBool ? 'ON' : 'OFF' }</Text>
 	    	</View>
-	    	<View><Text>{
-		    	this.props.tempScale ? 'Far' : 'Cel'}</Text></View>
 	    </LinearGradient>
 	  );
 	}

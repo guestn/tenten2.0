@@ -9,6 +9,10 @@ export default styles = {
     backgroundColor: '#EEE',
     paddingTop: 10,
   },
+  navigator: {
+	  padding: 20, 
+	  paddingTop: 72
+  },
   navbar: {
 	  backgroundColor: '#ffff',
 	  borderBottomWidth: 1,
@@ -17,13 +21,14 @@ export default styles = {
 		shadowOpacity: 0.1,
 		shadowOffset: {width:0, height:0},
 		shadowRadius: 5,
+		height: 72
   },
   navbarText: {
-	  marginTop: 10,
+	  marginTop: 20,
 	  color: '#888'
   },
   navbarIcon: {
-	  padding:5
+	  padding:10
   },
   switchCont: {
 	  padding: 30,

@@ -1,7 +1,7 @@
 /**
  * TenTen Temperature app
  * 
- * 
+ * All async storage managed from root component
  */
 
 import React, { Component } from 'react';
@@ -20,7 +20,6 @@ import S from './styles';
 import Homepage from './components/Homepage';
 import SettingsPage from './components/SettingsPage';
 
-
 export default class App extends Component {
 	
 	constructor(props) {
@@ -34,18 +33,15 @@ export default class App extends Component {
 		this.handleSliderChanges = this.handleSliderChanges.bind(this)
 		this.handleSwitchChanges = this.handleSwitchChanges.bind(this)
 		this.getStorage = this.getStorage.bind(this)
+		this.handleSettingChanges = this.handleSettingChanges.bind(this)
 		this.props.tempSetting = this.handleSliderChanges;
 		this.props.onChange = this.handleSwitchChanges;
-
-		this.handleSettingChanges = this.handleSettingChanges.bind(this)
 	}
 	
 	componentDidMount() {
 		this.getStorage()
 	}
-	componentDidUpdate() {
-		//this.getStorage()
-	}	
+
 	getStorage() {
 		AsyncStorage.getItem('tempScale').then((value) => {
 			if (value != null) {
@@ -69,7 +65,6 @@ export default class App extends Component {
 	}
 	
 	handleSettingChanges(value) {
-		console.log(value);
 		this.setState({
 			settings: value
 		})
@@ -78,10 +73,24 @@ export default class App extends Component {
 
 	renderScene(route, navigator) {
 		if(route.index === 0) {
-		  return <Homepage navigator={navigator} tempSetting={this.handleSliderChanges} onSwitchChange={(value) => this.handleSwitchChanges(value)} tempScale={this.state.settings} onSettingChange={this.handleSettingChanges}/>
+		  return (
+		  	<Homepage 
+					navigator={navigator} 
+					onSliderChange={(value) => this.handleSliderChanges(value)} 
+					onSwitchChange={(value) => this.handleSwitchChanges(value)} 
+					tempScale={this.state.settings} 
+					onSettingChange={this.handleSettingChanges}
+				/>
+				)
 		}
 		if(route.index === 1) {
-     return <SettingsPage navigator={navigator} active={this.state.settings} onChange={(value) => {this.handleSettingChanges(value)}}/>
+    	return (
+				<SettingsPage 
+					navigator={navigator} 
+					active={this.state.settings} 
+					onChange={(value) => {this.handleSettingChanges(value)}}
+				/>
+			)
    	}
 	}
 	
@@ -98,6 +107,7 @@ export default class App extends Component {
 	      initialRoute={routes[0]}
 	      initialRouteStack={routes}
 	      renderScene={this.renderScene}
+	      style={S.navigator}
 	      navigationBar={
 					<Navigator.NavigationBar
 						style={S.navbar}
@@ -134,8 +144,7 @@ export default class App extends Component {
 						}}
 					/>
 			  }
-	      style={{padding: 20, paddingTop: 64}}
-	    />
+	      	    />
 
 	  );
 	}

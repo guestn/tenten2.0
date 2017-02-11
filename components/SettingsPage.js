@@ -15,7 +15,6 @@ import {
 import S from '../styles';
 
 import LinearGradient from 'react-native-linear-gradient';
-//import MaterialSwitch from './MaterialSwitch';
 import CustomSwitch from './CustomSwitch';
 
 
@@ -27,13 +26,12 @@ export default class SettingsPage extends Component {
 		}
 		this.saveData = this.saveData.bind(this)
 	}
-	
-	
+
 	componentDidMount() {
 		AsyncStorage.getItem('tempScale').then((value) => {
 			if (value != null) {
-				console.log('there is storage',value)
-				var val = (value === "true");
+				console.log('there is storage and it is:',value)
+				let val = (value === "true");
 				this.setState({farenheitScale: val});
 			}
     }).done();

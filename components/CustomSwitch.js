@@ -1,18 +1,15 @@
 /**
  * Material Design Switch
- * updated from https://www.npmjs.com/package/react-native-material-design-switch
+ * ideas from https://www.npmjs.com/package/react-native-material-design-switch
  */
 
 import React, { Component } from 'react';
 import { 
-	PanResponder,
   View,
   TouchableHighlight,
   Animated,
-  Text,
   StyleSheet
-} from 'react-native'
-
+} from 'react-native';
 
 export default class CustomSwitch extends Component {
 	
@@ -28,7 +25,6 @@ export default class CustomSwitch extends Component {
 
   componentDidMount() {
 
-
 		const position = this.state.active ? 50: -10;
 		this.setState({
 			position: new Animated.Value(position)
@@ -40,8 +36,8 @@ export default class CustomSwitch extends Component {
 			active: !this.state.active		
 		})
 		this.props.onChange(!this.state.active)
-		const newPosition = this.state.active ? -10 : 50			
-		this.animateToggle(newPosition) 
+		const newPosition = this.state.active ? -10 : 50;
+		this.animateToggle(newPosition);
 	}
 	
 	animateToggle(position) {
@@ -55,9 +51,8 @@ export default class CustomSwitch extends Component {
 	}
   
   render() {
-		//const position = this.state.active ? 50 : -10
 		const position = this.state.position;
-		const color = this.state.active ?  '#67B26F' : '#4ca2cd'
+		const toggleColor = this.state.active ?  '#67B26F' : '#4ca2cd';
 
     return (
 	    <TouchableHighlight 
@@ -66,14 +61,15 @@ export default class CustomSwitch extends Component {
 	    	active={this.state.active}
 	    	>
 	    	<Animated.View style={[s.switchToggle,
-		    	{left: position, backgroundColor: color }
+		    	{left: position, backgroundColor: toggleColor }
 		    	]}>
 	    	</Animated.View>
 	    </TouchableHighlight>
     )
   }
 };
-var s = StyleSheet.create({
+
+const s = StyleSheet.create({
 	switchHolder: {
 		width: 100,
 		height: 40,

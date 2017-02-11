@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { PanResponder, View, Animated } from 'react-native'
-import Svg,{Path,Circle,G,Text, Defs,Stop,LinearGradient} from 'react-native-svg'
+import Svg,{Path, Circle, G, Text, Defs, Stop, LinearGradient} from 'react-native-svg'
 
 export default class CircularSlider extends Component {
 
@@ -59,8 +59,6 @@ export default class CircularSlider extends Component {
   handlePanResponderMove({nativeEvent:{locationX,locationY}}){
     this.props.onValueChange(this.cartesianToPolar(locationX,locationY))
   }
-  
-  
   
   render() {
     const { width, height, value, meterColor, textColor, onValueChange } = this.props,
