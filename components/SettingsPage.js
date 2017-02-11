@@ -8,7 +8,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage,
+  Switch
 } from 'react-native';
 import S from '../styles';
 
@@ -20,9 +22,31 @@ export default class SettingsPage extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			farenheitBool: true
+			farenheitScale: null
 		}
 	}
+	
+	componentDidMount() {
+		AsyncStorage.getItem('tempScale').then((value) => {
+			if (value != null) {
+				console.log('there is storage',value)
+				var val = (value === "true");
+				console.log('val',val)
+				this.setState({farenheitScale: val});
+			}
+    }).done();
+	}
+
+	
+	saveData(value) {
+		this.setState({farenheitScale: value})
+		console.log(value)
+    AsyncStorage.setItem('tempScale', JSON.stringify(value));
+    AsyncStorage.getItem('tempScale').then((value) => {
+	    console.log('storageIs',value)
+	  }).done();
+  }
+	
   render() {
 	  return (
 	    <LinearGradient colors={['#f7f7f7', '#ddd']} start={{x: 0.0, y: 0.0}} end={{x: 0.5, y: 1.0}} style={S.pageCont}>
@@ -30,10 +54,11 @@ export default class SettingsPage extends Component {
 	    	<View style={S.settingsSwitchCont}>
 	    		<Text style={S.text}>Celcius</Text>
 	    		<View style={S.switchCont}>
-		    	<MaterialSwitch 
-		    		active={this.state.farenheitBool} 
-		    		onChangeState={(value)=>{this.setState({farenheitBool:value})}}
-		    	/>
+		    	
+		    	<Switch
+		    		value={this.state.farenheitScale}
+          	onValueChange={(value)=>{ this.saveData(value) }}
+          />
 		    	</View>
 		    	<Text style={S.text}>Farenheit</Text>
 	    	</View>
@@ -41,5 +66,9 @@ export default class SettingsPage extends Component {
 	  );
 	}
 }
-
-AppRegistry.registerComponent('TenTen', () => App);
+/*
+<MaterialSwitch
+		    		active={this.state.farenheitScale}
+		    		onChangeState={(value)=>{ this.saveData(value) }}
+		    	/>
+*/

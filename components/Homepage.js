@@ -14,6 +14,8 @@ import S from '../styles';
 
 import CircularSlider from './CircularSlider';
 import MaterialSwitch from './MaterialSwitch';
+import CustomSwitch from './CustomSwitch';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 
@@ -22,13 +24,21 @@ export default class Homepage extends Component {
 		super(props);
 		this.state = {
       slider1: 220,
-      switchBool: false
+      switchBool: false,
+      settings: this.props.settings
     }
     this.tempSetting = this.tempSetting.bind(this)
     this.heaterSetting = this.heaterSetting.bind(this)
 
 	  console.log(this.props)
 
+	}
+	
+	componentWillReceiveProps(nextProps) {
+		//console.log('nextProps',nextProps)
+		this.setState({
+			settings: nextProps.settings
+		})
 	}
 	
 	tempSetting(value) {
@@ -39,14 +49,12 @@ export default class Homepage extends Component {
 	}
 	
 	heaterSetting(value) {
-		console.log(value)
 		this.setState({
 			switchBool: value
 		})
 		this.props.heaterSetting(value)
-
 	}
-
+	
   render() {
 	  return (
 	    <LinearGradient colors={['#f7f7f7', '#ddd']} start={{x: 0.0, y: 0.0}} end={{x: 0.5, y: 1.0}} style={S.pageCont}>
@@ -63,15 +71,13 @@ export default class Homepage extends Component {
           	/>
 	    	</View>
 	    	<View style={S.switchCont}>
-		    	<MaterialSwitch 
-		    		active={this.state.switchBool} 
-		    		onChangeState={(value) => {this.setState({switchBool:value})}}
-		    		heaterSetting={(value) => this.heaterSetting(value)}
-		    	/>
+		    	<CustomSwitch active={(value) => {this.heaterSetting(value)}}/>
 	    	</View>
 	    	<View style={S.statusContainer}>
 	    		<Text style={S.text}>Heating is currently { this.state.switchBool ? 'ON' : 'OFF' }</Text>
 	    	</View>
+	    	<View><Text>{
+		    	this.state.settings ? 'Far' : 'Cel'}</Text></View>
 	    </LinearGradient>
 	  );
 	}

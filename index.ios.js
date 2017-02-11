@@ -12,12 +12,14 @@ import {
   View,
   Navigator,
   TouchableHighlight,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 import S from './styles';
 
 import Homepage from './components/Homepage';
 import SettingsPage from './components/SettingsPage';
+
 
 export default class App extends Component {
 	
@@ -25,16 +27,36 @@ export default class App extends Component {
 		super(props);
 		this.state = {
 			tempSetting: 0,
-			heaterSetting: false
+			heaterSetting: false,
+			settings: true
 		}
 		this.renderScene = this.renderScene.bind(this)
-		this.handleChanges = this.handleChanges.bind(this)
-		this.props.tempSetting = this.handleChanges;
+		this.handleSliderChanges = this.handleSliderChanges.bind(this)
+		this.handleSwitchChanges = this.handleSwitchChanges.bind(this)
+		this.getStorage = this.getStorage.bind(this)
+		this.props.tempSetting = this.handleSliderChanges;
 		this.props.heaterSetting = this.handleSwitchChanges;
 
 	}
 	
-	handleChanges(value) {
+	componentDidMount() {
+		this.getStorage()
+	}
+	componentDidUpdate() {
+		//this.getStorage()
+	}	
+	getStorage() {
+		AsyncStorage.getItem('tempScale').then((value) => {
+			if (value != null) {
+				var val = (value === "true");
+				this.setState({settings: val});
+			}
+    }).done();
+    console.log('storageGot')
+
+	}
+	
+	handleSliderChanges(value) {
 		this.setState({
 			tempSetting: value
 		})
@@ -44,14 +66,14 @@ export default class App extends Component {
 		this.setState({
 			heaterSetting: value
 		})
-	}	
+	}
 
 	renderScene(route, navigator) {
 		if(route.index === 0) {
-		  return <Homepage navigator={navigator} tempSetting={this.handleChanges} heaterSetting={this.handleSwitchChanges}/>
+		  return <Homepage navigator={navigator} tempSetting={this.handleSliderChanges} heaterSetting={this.handleSwitchChanges} settings={this.state.settings}/>
 		}
 		if(route.index === 1) {
-     return <SettingsPage navigator={navigator} {...this.props} />
+     return <SettingsPage navigator={navigator} settings={this.state.settings}/>
    	}
 	}
 	
@@ -106,6 +128,7 @@ export default class App extends Component {
 			  }
 	      style={{padding: 20, paddingTop: 64}}
 	    />
+
 	  );
 	}
 }
